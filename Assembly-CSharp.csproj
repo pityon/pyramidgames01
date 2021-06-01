@@ -36,11 +36,14 @@
     <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
   </PropertyGroup>
   <ItemGroup>
-     <Compile Include="Assets\Stylized Astronaut\Character\ThirdPersonCamera.cs" />
-     <Compile Include="Assets\Stylized Astronaut\Character\Player.cs" />
-     <Compile Include="Assets\Movement.cs" />
+     <Compile Include="Assets\Scripts\Modal01.cs" />
+     <Compile Include="Assets\Resources\Stylized Astronaut\Character\Player.cs" />
+     <Compile Include="Assets\Resources\Stylized Astronaut\Character\ThirdPersonCamera.cs" />
+     <Compile Include="Assets\Scripts\GameState.cs" />
+     <Compile Include="Assets\Scripts\Movement.cs" />
      <Compile Include="Assets\Scripts\ChestInteraction.cs" />
-     <None Include="Assets\TreasureChest_01\LODprefab\LOD_readme.txt" />
+     <Compile Include="Assets\Scripts\KeyBehaviour.cs" />
+     <None Include="Assets\Resources\TreasureChest_01\LODprefab\LOD_readme.txt" />
     <Reference Include="UnityEngine">
         <HintPath>D:/Unity/2020.3.9f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>
     </Reference>

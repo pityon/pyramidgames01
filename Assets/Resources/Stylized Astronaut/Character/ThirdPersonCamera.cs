@@ -16,17 +16,17 @@ public class ThirdPersonCamera : MonoBehaviour
     // private float sensitivityX = 20.0f;
     // private float sensitivityY = 20.0f;
 
-    GameObject player1;
+    GameState gameState;
 
     private void Start()
     {
+        gameState = GameObject.Find("GameState").GetComponent<GameState>();
         camTransform = transform;
-        player1 = GameObject.Find("Astronaut");
     }
 
     private void Update()
     {
-        Vector3 playerRotation = player1.transform.eulerAngles;
+        Vector3 playerRotation = gameState.player1.transform.eulerAngles;
         currentX = playerRotation.y;
     }
 

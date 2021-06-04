@@ -7,48 +7,100 @@ public class GameState : MonoBehaviour
 {
     // Start is called before the first frame update
 
-    private GameObject panel;
-    private float lifeSpan;
+    public GameObject player1;
+    public PanelController panel; 
+    private GameObject doorsSpawn;
+    private GameObject chestSpawn;
+
     private GameObject timer;
+    private GameObject hscore;
+    private float lifeSpan = 0;
+    private float highscore = 0;
+    public bool gameRunning = false;   //for pausing game
+    public bool victoryCondition = false;
 
     void Start()
     {
-        lifeSpan = 0;
-        panel = GameObject.Find("Panel");
-        panel.SetActive(false);
-
-        Vector3[] doorsPositions = {
-            new Vector3(3.5f, 3.8f, 3.5f),
-            new Vector3(3.5f, 3.8f, 5.5f),
-            new Vector3(3.5f, 3.8f, 7.5f),
-            new Vector3(3.5f, 3.8f, 9.5f),
-            new Vector3(3.5f, 3.8f, 11.5f),
-        };
-        Quaternion[] doorRotations = {
-            Quaternion.Euler(0f, 0f, 0f),
-            Quaternion.Euler(0f, 180f, 0f),
-            Quaternion.Euler(0f, 90f, 0f),
-            Quaternion.Euler(0f, 270f, 0f),
-            Quaternion.Euler(0f, 0f, 0f),
-        };
-
-        int wallNum = Random.Range(0, doorsPositions.Length + 1);
-
-        GameObject doors = (GameObject)Resources.Load("Prefabs/Doors");
-        // GameObject new_doors = Instantiate(doors, doorsPositions[wallNum], Quaternion.identity);
-        GameObject new_doors = Instantiate(doors, doorsPositions[wallNum], doorRotations[wallNum]);
-
+        panel = GameObject.Find("Canvas").gameObject.GetComponent<PanelController>();
+        player1 = GameObject.Find("Astronaut");
+        hscore = GameObject.Find("Highscore");
         timer = GameObject.Find("Timer");
+        timer.SetActive(false);
+        doorsSpawn = GameObject.Find("Doors_spawn_locations");
+        chestSpawn = GameObject.Find("Chest_spawn_locations");
     }
 
     // Update is called once per frame
     void Update()
     {
-        lifeSpan += Time.deltaTime;
-        timer.GetComponent<Text>().text = lifeSpan + "s";
+        if (gameRunning) {
+            lifeSpan += Time.deltaTime;
+            timer.GetComponent<Text>().text = lifeSpan.ToString("F2") + "s";
+        }
     }
 
-    public GameObject getPanel() {
-        return panel;
+    public void startGame() {
+        victoryCondition = false;
+        gameRunning = true;
+        lifeSpan = 0;
+        // Debug.Log(player1.transform.position);
+        player1.gameObject.transform.position = new Vector3(5.9f, 3.3f, 8.9f);      //????
+        player1.gameObject.transform.Rotate(0, 0, 0);
+        timer.SetActive(true);
+        hscore.SetActive(false);
+        spawnDoors();
+        spawnChest();
+    }
+
+    public void finishGame() {
+	    GameObject.FindWithTag("SF_Door").GetComponent<Animation>().Play("open");
+        
+        gameRunning = false;
+        if (highscore == 0 || lifeSpan < highscore) {
+            highscore = lifeSpan;
+            hscore.GetComponent<Text>().text = "HIGHSCORE: " + highscore.ToString("F2") + "s";
+        }
+        timer.SetActive(false);
+        hscore.SetActive(true);
+        panel.set(4);
+        panel.score(lifeSpan);
+    }
+
+    public void quitGame() {
+        Application.Quit();
+    }
+
+
+    private void spawnDoors() {
+        List<Vector3> doorsPositions = new List<Vector3>();
+        List<Quaternion> doorsRotations = new List<Quaternion>();
+
+        foreach (Transform child in doorsSpawn.transform) {
+            child.gameObject.SetActive(false);
+            doorsPositions.Add(child.position);
+            doorsRotations.Add(child.rotation);
+        }
+        int rand = Random.Range(0, doorsPositions.Count);
+        // rand = 0;   //debug
+
+        GameObject.Find("Doors").gameObject.transform.position = doorsPositions[rand];
+        GameObject.Find("Doors").gameObject.transform.rotation = doorsRotations[rand];
+    }
+    private void spawnChest() {
+        List<Vector3> chestPositions = new List<Vector3>();
+        List<Quaternion> chestRotations = new List<Quaternion>();
+
+        foreach (Transform child in chestSpawn.transform) {
+            child.gameObject.SetActive(false);
+            chestPositions.Add(child.position);
+            chestRotations.Add(child.rotation);
+        }
+        int rand = Random.Range(0, chestPositions.Count);
+        // rand = 2;   //debug
+
+        GameObject.Find("Chest_key").gameObject.transform.position = chestPositions[rand];
+        GameObject.Find("Chest_key").gameObject.transform.rotation = chestRotations[rand];
+        // GameObject.Find("Chest_key").gameObject.transform.Rotate(0, -chestRotations[rand].y, 0);
+        // Debug.Log(chestPositions[rand]);
     }
 }

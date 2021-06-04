@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Movement : MonoBehaviour
 {
+    GameState gameState;
     private Animator anim;
     float movementSpeed = .75f;
     float rotationSpeed = 60f;
@@ -11,12 +12,14 @@ public class Movement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        gameState = GameObject.Find("GameState").GetComponent<GameState>();
         anim = gameObject.GetComponentInChildren<Animator>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (!gameState.gameRunning) return;
         float x = 0;
         float y = 0;            //not used :)
         float z = 0;

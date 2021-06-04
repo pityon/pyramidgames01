@@ -7,7 +7,7 @@ public class ChestInteraction : MonoBehaviour
 
     private Animator anim;
     private GameObject key;
-    private bool opened = false;
+    public bool opened = false;
 
     void Start()
     {
@@ -17,21 +17,7 @@ public class ChestInteraction : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0)) {
-            RaycastHit hit;
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            
-            if (Physics.Raycast(ray, out hit)) {
-                if (hit.transform.name == "TreasureChest" && !opened) {
-                    GameObject panel = GameObject.Find("GameState").GetComponent<GameState>().getPanel();
-                    panel.SetActive(true);
-                }
-                else if (hit.transform.name == "Key") {
-                    key.GetComponent<AudioSource>().Play();
-                    Invoke("hideKey", .5f);
-                }
-            }
-        }
+        
     }
 
     public void OpenChest() {
@@ -41,12 +27,12 @@ public class ChestInteraction : MonoBehaviour
     }
 
     void ejectKey() {
-        Vector3 keyVec = new Vector3(0, 100, 100);
+        Vector3 keyVec = new Vector3(100, 100, 0);
         key.GetComponent<Rigidbody>().AddForce(keyVec);
         key.GetComponent<KeyBehaviour>().audioHitGround = true;
     }
 
-    void hideKey() {
+    public void hideKey() {
         key.gameObject.SetActive(false);
     }
 }

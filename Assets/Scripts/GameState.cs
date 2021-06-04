@@ -7,10 +7,10 @@ public class GameState : MonoBehaviour
 {
     // Start is called before the first frame update
 
-    public GameObject player1;
-    public PanelController panel; 
-    private GameObject doorsSpawn;
-    private GameObject chestSpawn;
+    private GameObject player1;
+    private PanelController panelController; 
+    public DoorsController doorsController;
+    public ChestKeyController chestController;
 
     private GameObject timer;
     private GameObject hscore;
@@ -21,13 +21,14 @@ public class GameState : MonoBehaviour
 
     void Start()
     {
-        panel = GameObject.Find("Canvas").gameObject.GetComponent<PanelController>();
+        panelController = GameObject.Find("Canvas").gameObject.GetComponent<PanelController>();
+        doorsController = GameObject.Find("Doors").GetComponent<DoorsController>();
+        chestController = GameObject.Find("Chest_key").GetComponent<ChestKeyController>();
+
         player1 = GameObject.Find("Astronaut");
         hscore = GameObject.Find("Highscore");
         timer = GameObject.Find("Timer");
         timer.SetActive(false);
-        doorsSpawn = GameObject.Find("Doors_spawn_locations");
-        chestSpawn = GameObject.Find("Chest_spawn_locations");
     }
 
     // Update is called once per frame
@@ -45,16 +46,15 @@ public class GameState : MonoBehaviour
         lifeSpan = 0;
         // Debug.Log(player1.transform.position);
         player1.gameObject.transform.position = new Vector3(5.9f, 3.3f, 8.9f);      //????
-        player1.gameObject.transform.Rotate(0, 0, 0);
+        player1.gameObject.transform.eulerAngles = Vector3.zero;
         timer.SetActive(true);
         hscore.SetActive(false);
-        spawnDoors();
-        spawnChest();
+        doorsController.spawn();
+        chestController.spawn();
     }
 
     public void finishGame() {
-	    GameObject.FindWithTag("SF_Door").GetComponent<Animation>().Play("open");
-        
+        doorsController.open();
         gameRunning = false;
         if (highscore == 0 || lifeSpan < highscore) {
             highscore = lifeSpan;
@@ -62,45 +62,26 @@ public class GameState : MonoBehaviour
         }
         timer.SetActive(false);
         hscore.SetActive(true);
-        panel.set(4);
-        panel.score(lifeSpan);
+        panelController.set("gameover");
+        panelController.score(lifeSpan);
     }
 
     public void quitGame() {
         Application.Quit();
     }
 
+    /*********************/
+    //EXPOSE ELEMENTS
+    /*********************/
 
-    private void spawnDoors() {
-        List<Vector3> doorsPositions = new List<Vector3>();
-        List<Quaternion> doorsRotations = new List<Quaternion>();
-
-        foreach (Transform child in doorsSpawn.transform) {
-            child.gameObject.SetActive(false);
-            doorsPositions.Add(child.position);
-            doorsRotations.Add(child.rotation);
+    public GameObject getPlayer1() {
+        if (!player1) {
+            player1 = GameObject.Find("Astronaut");     //hotfix for KeyBehaviour
         }
-        int rand = Random.Range(0, doorsPositions.Count);
-        // rand = 0;   //debug
-
-        GameObject.Find("Doors").gameObject.transform.position = doorsPositions[rand];
-        GameObject.Find("Doors").gameObject.transform.rotation = doorsRotations[rand];
+        return player1;
     }
-    private void spawnChest() {
-        List<Vector3> chestPositions = new List<Vector3>();
-        List<Quaternion> chestRotations = new List<Quaternion>();
 
-        foreach (Transform child in chestSpawn.transform) {
-            child.gameObject.SetActive(false);
-            chestPositions.Add(child.position);
-            chestRotations.Add(child.rotation);
-        }
-        int rand = Random.Range(0, chestPositions.Count);
-        // rand = 2;   //debug
-
-        GameObject.Find("Chest_key").gameObject.transform.position = chestPositions[rand];
-        GameObject.Find("Chest_key").gameObject.transform.rotation = chestRotations[rand];
-        // GameObject.Find("Chest_key").gameObject.transform.Rotate(0, -chestRotations[rand].y, 0);
-        // Debug.Log(chestPositions[rand]);
-    }
+    public void panelSet(string id) {
+        panelController.set(id);
+    }  
 }

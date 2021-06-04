@@ -4,18 +4,19 @@ using UnityEngine;
 
 public class PanelController : MonoBehaviour
 {
-    private GameObject[] panels = new GameObject[5];
+    private Dictionary <string, GameObject> panels = new Dictionary<string, GameObject>();
 
     // Start is called before the first frame update
     void Start()
     {
-        panels[0] = GameObject.Find("StartPanel");
-        panels[1] = GameObject.Find("ActionPanel");
-        panels[2] = GameObject.Find("Action2Panel");
-        panels[3] = GameObject.Find("DoorsPanel");
-        panels[4] = GameObject.Find("GameOverPanel");
+        panels.Add("start", GameObject.Find("StartPanel"));
+        panels.Add("action1", GameObject.Find("ActionPanel"));
+        panels.Add("action2", GameObject.Find("Action2Panel"));
+        panels.Add("doors1", GameObject.Find("DoorsPanel"));
+        panels.Add("doors2", GameObject.Find("Doors2Panel"));
+        panels.Add("gameover", GameObject.Find("GameOverPanel"));
 
-        set(0);
+        set("start");
     }
 
     // Update is called once per frame
@@ -24,14 +25,14 @@ public class PanelController : MonoBehaviour
         
     }
 
-    public void set(int key) {
-        for (int i = 0; i < panels.Length; i++) {
+    public void set(string key) {
+        foreach(string i in panels.Keys) {
             panels[i].SetActive(i == key);
         }
     }
 
     //refactor in the future
     public void score(float time) {
-        panels[4].gameObject.GetComponent<GameOverPanel>().Score(time);
+        panels["gameover"].gameObject.GetComponent<GameOverPanel>().Score(time);
     }
 }

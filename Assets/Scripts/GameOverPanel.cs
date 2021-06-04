@@ -15,7 +15,7 @@ public class GameOverPanel : MonoBehaviour
     }
 
     void TaskOnMenu() {
-        gameState.panel.set(0);
+        gameState.panelSet("start");
     }
 
     public void Score(float time) {

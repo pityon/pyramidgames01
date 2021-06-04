@@ -12,6 +12,9 @@ public class KeyBehaviour : MonoBehaviour
     {
         GameObject chest = GameObject.Find("TreasureChest");
         Physics.IgnoreCollision(chest.GetComponent<Collider>(), GetComponent<Collider>());
+
+        GameState gameState = GameObject.Find("GameState").GetComponent<GameState>();
+        Physics.IgnoreCollision(gameState.getPlayer1().GetComponent<Collider>(), GetComponent<Collider>());
     }
 
     // Update is called once per frame

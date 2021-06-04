@@ -6,6 +6,7 @@ public class Mouse : MonoBehaviour
 {
 
     GameState gameState;
+    string hovering = "";
 
 
     // Start is called before the first frame update
@@ -17,29 +18,70 @@ public class Mouse : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(0)) {
-            RaycastHit hit;
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        bool unhover = false;
 
-            if (Physics.Raycast(ray, out hit)) {
-                // Debug.Log(hit.distance);
-                if (hit.distance < 0.6f) {
-                    if (hit.transform.name == "TreasureChest" && !gameState.player1.GetComponent<ChestInteraction>().opened) {
-                        gameState.panel.set(1);
+        if (Physics.Raycast(ray, out hit, 0.6f)) {
+            string target_name = hit.transform.name;
+
+            //chest becomes inactive
+            if (target_name == "TreasureChest" && gameState.chestController.opened) {
+                unhover = true;
+            }
+            else {
+                if (Input.GetMouseButtonDown(0)) {
+                    if (target_name == "TreasureChest") {
+                        gameState.panelSet("action1");
                     }
-                    else if (hit.transform.name == "Key") {
-                        gameState.panel.set(2);
+                    else if (target_name == "Key") {
+                        gameState.panelSet("action2");
                     }
-                    else if (hit.transform.name == "Doors") {
+                    else if (target_name == "Doors") {
                         if (gameState.victoryCondition) {
-                            gameState.finishGame();
+                            gameState.panelSet("doors2");
                         }
                         else {
-                            gameState.panel.set(3);
+                            gameState.panelSet("doors1");
                         }
                     }
                 }
+
+                if (target_name == "TreasureChest" || target_name == "Key" || target_name == "Doors") {
+                    if (hovering != target_name) {
+                        highlight(hit.collider.gameObject, Color.red);
+                        hovering = target_name;
+                    }
+                }
+                else if (hovering != "") {
+                    unhover = true;
+                }
             }
-        }        
+        }
+        else {
+            unhover = true;
+        }
+
+        if (unhover && hovering != "") {
+            highlight(GameObject.Find("TreasureChest"), Color.white);
+            highlight(GameObject.Find("Key"), Color.white);
+            highlight(GameObject.Find("Doors"), Color.white);
+            hovering = "";
+        }
+    }
+
+    private void highlight(GameObject target, Color highlight) {
+        if (target) {
+            Renderer parent = target.GetComponent<Renderer>();
+            if (parent != null) {
+                parent.material.color = highlight;
+            }
+            foreach(Transform child in target.transform) {
+                Renderer _child = child.GetComponent<Renderer>();
+                if (_child != null) {
+                    _child.GetComponent<Renderer>().material.color = highlight;
+                }
+            }
+        }
     }
 }

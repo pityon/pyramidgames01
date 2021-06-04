@@ -26,7 +26,7 @@ public class ThirdPersonCamera : MonoBehaviour
 
     private void Update()
     {
-        Vector3 playerRotation = gameState.player1.transform.eulerAngles;
+        Vector3 playerRotation = gameState.getPlayer1().transform.eulerAngles;
         currentX = playerRotation.y;
     }
 

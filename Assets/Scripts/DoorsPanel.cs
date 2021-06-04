@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ActionPanel : MonoBehaviour
+public class DoorsPanel : MonoBehaviour
 {
     GameState gameState;
     public Button m_ButtonYes;
@@ -22,7 +22,7 @@ public class ActionPanel : MonoBehaviour
     }
 
     void TaskOnAccept() {
-        gameState.chestController.OpenChest();
+        gameState.finishGame();
         TaskOnCancel();
     }
 

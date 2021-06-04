@@ -22,8 +22,7 @@ public class ActionTwoPanel : MonoBehaviour
     }
 
     void TaskOnAccept() {
-        GameObject.Find("Key").GetComponent<AudioSource>().Play();
-        gameState.player1.GetComponent<ChestInteraction>().hideKey();
+        gameState.chestController.hideKey();
         gameState.victoryCondition = true;
         TaskOnCancel();
     }

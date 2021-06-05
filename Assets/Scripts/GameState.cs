@@ -51,19 +51,26 @@ public class GameState : MonoBehaviour
         hscore.SetActive(false);
         doorsController.spawn();
         chestController.spawn();
+        player1.GetComponent<AudioSource>().Play(0);
     }
 
-    public void finishGame() {
+    public void finishGame(bool interrupted = false) {
         doorsController.open();
         gameRunning = false;
-        if (highscore == 0 || lifeSpan < highscore) {
-            highscore = lifeSpan;
-            hscore.GetComponent<Text>().text = "HIGHSCORE: " + highscore.ToString("F2") + "s";
+        if (interrupted) {
+            panelController.set("start");
+        }
+        else {
+            if (highscore == 0 || lifeSpan < highscore) {
+                highscore = lifeSpan;
+                hscore.GetComponent<Text>().text = "HIGHSCORE: " + highscore.ToString("F2") + "s";
+            }
+            panelController.set("gameover");
+            panelController.score(lifeSpan);
         }
         timer.SetActive(false);
         hscore.SetActive(true);
-        panelController.set("gameover");
-        panelController.score(lifeSpan);
+        player1.GetComponent<AudioSource>().Stop();
     }
 
     public void quitGame() {

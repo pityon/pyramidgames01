@@ -19,6 +19,10 @@ public class Movement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKey(KeyCode.Escape)) {
+            gameState.finishGame(true);
+        }
+
         if (!gameState.gameRunning) return;
         float x = 0;
         float y = 0;            //not used :)
@@ -45,6 +49,7 @@ public class Movement : MonoBehaviour
         if (Input.GetKey(KeyCode.E)) {
             rotationY += rotationSpeed;
         }
+
 
         if (x != 0 || z != 0 || rotationY != 0) {
             updatePlayerPosition(x, y, z);

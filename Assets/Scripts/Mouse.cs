@@ -22,7 +22,7 @@ public class Mouse : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         bool unhover = false;
 
-        if (Physics.Raycast(ray, out hit, 0.6f)) {
+        if (gameState.gameRunning && Physics.Raycast(ray, out hit, 0.6f)) {
             string target_name = hit.transform.name;
 
             //chest becomes inactive

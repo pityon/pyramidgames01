@@ -53,10 +53,6 @@ public class ChestKeyController : MonoBehaviour
     }
 
     private void CloseChest() {
-        // Vector3 offsetPos = new Vector3(0.01669312f, 0.005905151f, 0.07289886f);
-        // key.transform.position = chest.transform.right + offsetPos;
-        // key.transform.eulerAngles = new Vector3(-181.637f, 90.232f, -90.10001f);
-        // key.transform.Translate(chest.transform.position);
         key.transform.localPosition = new Vector3(0.01669312f, 0.005905151f, 0.07289886f);
         key.transform.localEulerAngles = new Vector3(-181.637f, 90.232f, -90.10001f);
         if (opened) {

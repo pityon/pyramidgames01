@@ -48,5 +48,6 @@ Some of project files were not added to repo, I found them unnecessary and gitig
 
 &nbsp;
 
+Unity version: 2020.3.9f1 LTS  
 Build date: 2021-06-04  
 Author: PityoN
